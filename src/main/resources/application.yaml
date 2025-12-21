@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: client-profile-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/client-profile
+    username:
+    password:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 3000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 6000
+      max-lifetime: 180000
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core: TRACE
