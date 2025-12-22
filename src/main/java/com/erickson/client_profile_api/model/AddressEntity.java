@@ -1,7 +1,6 @@
 package com.erickson.client_profile_api.model;
 
 import com.erickson.client_profile_api.domain.AddressType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,7 +18,6 @@ import lombok.Data;
 public class AddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id")
     private long addressId;
 
     private String line1;
