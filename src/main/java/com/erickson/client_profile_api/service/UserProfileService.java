@@ -10,7 +10,6 @@ import com.erickson.client_profile_api.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class UserProfileService {
         }
     }
 
-    @Transactional
+
     public UserProfileResponse getUserProfile(UserProfileRequest request) {
         validate(request);
 
@@ -43,6 +42,6 @@ public class UserProfileService {
                 .orElseThrow(() -> new UserProfileClientException(ClientErrorType.NOT_FOUND,
                                                                   List.of(request.id())));
 
-        return UserProfileMapper.map(userProfileEntity);
+        return UserProfileMapper.map(userProfileEntity, request.addressType());
     }
 }

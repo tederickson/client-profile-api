@@ -2,19 +2,13 @@ DELETE from address;
 DELETE from user_profile;
 
 INSERT INTO
-  user_profile (id, first_name, last_name, date_of_birth)
+  user_profile (user_profile_id, first_name, last_name, date_of_birth)
 VALUES
-  (1, 'Richard', 'McDonnell', '1992-05-23');
+  (1, 'Richard', 'McDonnell', '1992-05-23'),
+  (2, 'Alvaro', 'Gomez', '2002-06-23');
 
 INSERT INTO
-  address (
-    user_profile_id,
-    line1,
-    city,
-    state,
-    zip_code,
-    address_type
-  )
+  address (user_profile_id, line1, city, state, zip_code, address_type)
 VALUES
   (
     1,
@@ -26,15 +20,7 @@ VALUES
   );
 
 INSERT INTO
-  address (
-    user_profile_id,
-    line1,
-    line2,
-    city,
-    state,
-    zip_code,
-    address_type
-  )
+   address (user_profile_id, line1, line2, city, state, zip_code, address_type)
 VALUES
   (
     1,
