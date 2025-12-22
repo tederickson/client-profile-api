@@ -27,7 +27,7 @@ public class UserProfileController {
         try {
             addressType1 = AddressType.valueOf(addressType);
         } catch (IllegalArgumentException e) {
-            throw new UserProfileClientException(ClientErrorType.INVALID_PARAMETER, List.of(addressType));
+            throw new UserProfileClientException(ClientErrorType.INVALID_ADDRESS_TYPE, List.of(addressType));
         }
         UserProfileRequest request = new UserProfileRequest(id, addressType1);
 

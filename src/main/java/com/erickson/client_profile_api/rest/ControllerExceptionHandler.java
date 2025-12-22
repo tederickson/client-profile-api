@@ -15,7 +15,7 @@ public class ControllerExceptionHandler {
         return switch (exception.getClientErrorType()) {
             case MISSING_PARAMETER -> ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Missing parameters " + exception.getValues());
-            case INVALID_PARAMETER -> ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            case INVALID_ADDRESS_TYPE -> ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Invalid address type " + exception.getValues());
             case NOT_FOUND -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Did not find UserProfile id " + exception.getValues().getFirst());
