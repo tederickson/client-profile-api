@@ -8,9 +8,10 @@ VALUES
   (2, 'Alvaro', 'Gomez', '2002-06-23');
 
 INSERT INTO
-  address (user_profile_id, line1, city, state, zip_code, address_type)
+  address (address_id, user_profile_id, line1, city, state, zip_code, address_type)
 VALUES
   (
+    1,
     1,
     '123 Main St.',
     'San Jose',
@@ -20,9 +21,10 @@ VALUES
   );
 
 INSERT INTO
-   address (user_profile_id, line1, line2, city, state, zip_code, address_type)
+   address (address_id, user_profile_id, line1, line2, city, state, zip_code, address_type)
 VALUES
   (
+    2,
     1,
     'Blue Cube',
     'Pod 143',
