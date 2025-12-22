@@ -1,5 +1,6 @@
 package com.erickson.client_profile_api.service;
 
+import com.erickson.client_profile_api.domain.AddressType;
 import com.erickson.client_profile_api.domain.UserProfileRequest;
 import com.erickson.client_profile_api.exception.ClientErrorType;
 import com.erickson.client_profile_api.exception.UserProfileClientException;
@@ -43,5 +44,15 @@ class UserProfileServiceTest {
         for (String value : expectedValues) {
             assertTrue(exception.getValues().contains(value), value);
         }
+    }
+
+    @Test
+    void getUserProfile_NoResults() {
+        UserProfileRequest request = new UserProfileRequest(1L, AddressType.HOME);
+
+        final var exception = assertThrows(UserProfileClientException.class,
+                                           () -> userProfileService.getUserProfile(request));
+        assertEquals(ClientErrorType.NOT_FOUND, exception.getClientErrorType());
+        assertEquals(1, exception.getValues().size());
     }
 }
