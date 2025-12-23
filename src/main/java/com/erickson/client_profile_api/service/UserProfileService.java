@@ -39,17 +39,17 @@ public class UserProfileService {
     public UserProfileResponse getUserProfile(UserProfileRequest request) {
         validate(request);
 
-        CompletableFuture<String> beneficiary = asyncBeneficiaryService.getBeneficiaries(request.id());
-        log.info("beneficiary: {} -> Starting task: {} on thread: {}", beneficiary, request.id(),
+        CompletableFuture<List<String>> asyncBeneficiaries = asyncBeneficiaryService.getBeneficiaries(request.id());
+        log.info("beneficiary: {} -> Starting task: {} on thread: {}", asyncBeneficiaries, request.id(),
                  Thread.currentThread().getName());
         UserProfileEntity userProfileEntity = userProfileRepository.findById(request.id())
                 .orElseThrow(() -> new UserProfileClientException(ClientErrorType.NOT_FOUND,
                                                                   List.of(request.id())));
         log.info("userProfileEntity: {}", userProfileEntity);
 
-        CompletableFuture.allOf(beneficiary).join();
+        List<String> beneficiaries = asyncBeneficiaries.join();
 
-        log.info("JOIN");
+        log.info("JOIN {}", beneficiaries);
 
         return UserProfileMapper.map(userProfileEntity, request.addressType());
     }
