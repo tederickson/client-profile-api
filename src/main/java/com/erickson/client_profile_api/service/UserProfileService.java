@@ -13,12 +13,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserProfileService {
     private final UserProfileRepository userProfileRepository;
+    private final AsyncBeneficiaryService asyncBeneficiaryService;
 
     private static void validate(UserProfileRequest request) {
         List<Object> parameterNames = new ArrayList<>();
@@ -34,13 +36,20 @@ public class UserProfileService {
         }
     }
 
-
     public UserProfileResponse getUserProfile(UserProfileRequest request) {
         validate(request);
 
+        CompletableFuture<String> beneficiary = asyncBeneficiaryService.getBeneficiaries(request.id());
+        log.info("beneficiary: {} -> Starting task: {} on thread: {}", beneficiary, request.id(),
+                 Thread.currentThread().getName());
         UserProfileEntity userProfileEntity = userProfileRepository.findById(request.id())
                 .orElseThrow(() -> new UserProfileClientException(ClientErrorType.NOT_FOUND,
                                                                   List.of(request.id())));
+        log.info("userProfileEntity: {}", userProfileEntity);
+
+        CompletableFuture.allOf(beneficiary).join();
+
+        log.info("JOIN");
 
         return UserProfileMapper.map(userProfileEntity, request.addressType());
     }

@@ -22,12 +22,13 @@ class UserProfileServiceTest {
 
     @Mock
     private UserProfileRepository userProfileRepository;
+    @Mock private AsyncBeneficiaryService asyncBeneficiaryService;
 
     private UserProfileService userProfileService;
 
     @BeforeEach
     void setUp() {
-        userProfileService = new UserProfileService(userProfileRepository);
+        userProfileService = new UserProfileService(userProfileRepository,asyncBeneficiaryService);
     }
 
     @Test

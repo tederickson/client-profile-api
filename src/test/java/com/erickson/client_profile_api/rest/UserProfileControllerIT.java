@@ -46,7 +46,7 @@ class UserProfileControllerIT {
 
     @Test
     void getUserProfile_MissingAddressType() {
-        String url = createURLWithPort("/v1/user_profile/id/22/addressType/");
+        String url = createURLWithPort("/v1/user_profile/id/4/addressType/");
 
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         assertNotNull(response);
@@ -55,7 +55,7 @@ class UserProfileControllerIT {
 
         String message = response.getBody();
         assertNotNull(message);
-        assertTrue(message.startsWith("No static resource v1/user_profile/id/22/addressType"));
+        assertTrue(message.startsWith("No static resource v1/user_profile/id/4/addressType"));
     }
 
     private String createURLWithPort(String uri) {

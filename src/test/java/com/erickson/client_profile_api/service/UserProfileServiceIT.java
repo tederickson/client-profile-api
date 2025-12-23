@@ -6,8 +6,6 @@ import com.erickson.client_profile_api.domain.UserProfileRequest;
 import com.erickson.client_profile_api.domain.UserProfileResponse;
 import com.erickson.client_profile_api.exception.ClientErrorType;
 import com.erickson.client_profile_api.exception.UserProfileClientException;
-import com.erickson.client_profile_api.repository.UserProfileRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,15 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @Sql("/data/InitializeTests.sql")
 class UserProfileServiceIT {
+
     @Autowired
-    private UserProfileRepository userProfileRepository;
-
     private UserProfileService userProfileService;
-
-    @BeforeEach
-    void setUp() {
-        userProfileService = new UserProfileService(userProfileRepository);
-    }
 
     @Test
     void getUserProfile_withInvalidId() {
