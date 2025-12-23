@@ -15,13 +15,4 @@ public class UserProfileClientException extends RuntimeException {
         this.clientErrorType = clientErrorType;
         this.values = values;
     }
-
-
-    public UserProfileClientException(ClientErrorType clientErrorType,
-                                      List<Object> values,
-                                      Throwable cause) {
-        super(cause);
-        this.clientErrorType = clientErrorType;
-        this.values = values;
-    }
 }
