@@ -44,6 +44,8 @@ class UserProfileServiceIT {
 
         Address address = userProfileResponse.getAddresses().getFirst();
         assertEquals("Blue Cube", address.line1());
+
+        assertEquals(1, userProfileResponse.getBeneficiaries().size());
     }
 
     @Test
@@ -52,6 +54,8 @@ class UserProfileServiceIT {
 
         UserProfileResponse userProfileResponse = userProfileService.getUserProfile(request);
         assertTrue(userProfileResponse.getAddresses().isEmpty());
+
+        assertEquals(1, userProfileResponse.getBeneficiaries().size());
     }
 
     @Test
@@ -60,5 +64,7 @@ class UserProfileServiceIT {
 
         UserProfileResponse userProfileResponse = userProfileService.getUserProfile(request);
         assertEquals(2, userProfileResponse.getAddresses().size());
+
+        assertEquals(1, userProfileResponse.getBeneficiaries().size());
     }
 }

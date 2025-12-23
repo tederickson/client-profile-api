@@ -5,6 +5,7 @@ import com.erickson.client_profile_api.domain.UserProfileResponse;
 import com.erickson.client_profile_api.exception.ClientErrorType;
 import com.erickson.client_profile_api.exception.UserProfileClientException;
 import com.erickson.client_profile_api.mapper.UserProfileMapper;
+import com.erickson.client_profile_api.model.BeneficiaryDTO;
 import com.erickson.client_profile_api.model.UserProfileEntity;
 import com.erickson.client_profile_api.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,18 +40,15 @@ public class UserProfileService {
     public UserProfileResponse getUserProfile(UserProfileRequest request) {
         validate(request);
 
-        CompletableFuture<List<String>> asyncBeneficiaries = asyncBeneficiaryService.getBeneficiaries(request.id());
-        log.info("beneficiary: {} -> Starting task: {} on thread: {}", asyncBeneficiaries, request.id(),
-                 Thread.currentThread().getName());
+        CompletableFuture<List<BeneficiaryDTO>> asyncBeneficiaries =
+                asyncBeneficiaryService.getBeneficiaries(request.id());
+
         UserProfileEntity userProfileEntity = userProfileRepository.findById(request.id())
                 .orElseThrow(() -> new UserProfileClientException(ClientErrorType.NOT_FOUND,
                                                                   List.of(request.id())));
-        log.info("userProfileEntity: {}", userProfileEntity);
 
-        List<String> beneficiaries = asyncBeneficiaries.join();
+        List<BeneficiaryDTO> beneficiaries = asyncBeneficiaries.join();
 
-        log.info("JOIN {}", beneficiaries);
-
-        return UserProfileMapper.map(userProfileEntity, request.addressType());
+        return UserProfileMapper.map(userProfileEntity, request.addressType(), beneficiaries);
     }
 }

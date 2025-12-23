@@ -14,4 +14,5 @@ public class UserProfileResponse {
     private LocalDate dateOfBirth;
 
     private List<Address> addresses;
+    private List<Beneficiary> beneficiaries;
 }

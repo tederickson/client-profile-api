@@ -3,6 +3,7 @@ package com.erickson.client_profile_api.mapper;
 import com.erickson.client_profile_api.domain.Address;
 import com.erickson.client_profile_api.domain.AddressType;
 import com.erickson.client_profile_api.domain.UserProfileResponse;
+import com.erickson.client_profile_api.model.BeneficiaryDTO;
 import com.erickson.client_profile_api.model.UserProfileEntity;
 
 import java.util.List;
@@ -12,7 +13,8 @@ public class UserProfileMapper {
     }
 
     public static UserProfileResponse map(final UserProfileEntity userProfileEntity,
-                                          final AddressType addressType) {
+                                          final AddressType addressType,
+                                          final List<BeneficiaryDTO> beneficiaries) {
         UserProfileResponse userProfileResponse = new UserProfileResponse();
 
         userProfileResponse.setId(userProfileEntity.getUserProfileId());
@@ -35,6 +37,8 @@ public class UserProfileMapper {
         }
 
         userProfileResponse.setAddresses(addresses);
+
+        userProfileResponse.setBeneficiaries(beneficiaries.stream().map(BeneficiaryMapper::map).toList());
 
         return userProfileResponse;
     }
