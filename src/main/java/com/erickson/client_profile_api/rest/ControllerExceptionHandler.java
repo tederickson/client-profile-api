@@ -23,7 +23,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleUserProfileClientException(Exception exception) {
+    public ResponseEntity<String> handleUnexpectedException(Exception exception) {
         log.error("Please write a ticket for this scenario", exception);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
