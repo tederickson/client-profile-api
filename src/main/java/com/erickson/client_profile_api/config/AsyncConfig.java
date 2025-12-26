@@ -12,7 +12,7 @@ public class AsyncConfig {
     @Bean(name = "asyncTaskExecutor")
     public Executor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);          // Minimum number of threads in the pool
+        executor.setCorePoolSize(2);         // Minimum number of threads in the pool
         executor.setMaxPoolSize(2);          // Maximum number of threads in the pool
         executor.setQueueCapacity(20);       // Maximum tasks that can be queued
         executor.setThreadNamePrefix("Erickson-Async-");
