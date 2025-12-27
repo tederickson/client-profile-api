@@ -45,6 +45,20 @@ class UserProfileControllerIT {
     }
 
     @Test
+    void getUserProfile_InvalidId() {
+        String url = createURLWithPort("/v1/user_profile/id/apple/addressType/ALL");
+
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        assertNotNull(response);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+
+        String message = response.getBody();
+        assertNotNull(message);
+        System.out.println("message = " + message);
+        assertTrue(message.startsWith("Method parameter 'id': Failed to convert value of type"));
+    }
+
+    @Test
     void getUserProfile_MissingAddressType() {
         String url = createURLWithPort("/v1/user_profile/id/4/addressType/");
 
