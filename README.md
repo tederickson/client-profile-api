@@ -11,7 +11,7 @@
 ##Tech Stack
 * PostgreSQL free database
 * Java 21
-* Spring Boot 3.5.9
+* Spring Boot 3.5.9 - the final release of 3.5. Expires 30 June 2026.
 * JUnit
 * Mockito
 
