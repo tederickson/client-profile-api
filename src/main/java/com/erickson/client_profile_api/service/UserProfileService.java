@@ -10,11 +10,12 @@ import com.erickson.client_profile_api.model.UserProfileEntity;
 import com.erickson.client_profile_api.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @Service
@@ -23,32 +24,29 @@ public class UserProfileService {
     private final UserProfileRepository userProfileRepository;
     private final AsyncBeneficiaryService asyncBeneficiaryService;
 
-    private static void validate(UserProfileRequest request) {
-        List<Object> parameterNames = new ArrayList<>();
-        if (request.id() == null) {
-            parameterNames.add("id");
-        }
-        if (request.addressType() == null) {
-            parameterNames.add("addressType");
-        }
-
-        if (!parameterNames.isEmpty()) {
-            throw new UserProfileClientException(ClientErrorType.MISSING_PARAMETER, parameterNames);
-        }
-    }
-
     public UserProfileResponse getUserProfile(UserProfileRequest request) {
-        validate(request);
+        request.validate();
 
         CompletableFuture<List<BeneficiaryDTO>> asyncBeneficiaries =
                 asyncBeneficiaryService.getBeneficiaries(request.id());
+        CompletableFuture<UserProfileEntity> asyncUserProfileEntity = getUserProfileEntity(request.id());
+        CompletableFuture.allOf(asyncUserProfileEntity, asyncBeneficiaries).join();
 
-        UserProfileEntity userProfileEntity = userProfileRepository.findById(request.id())
-                .orElseThrow(() -> new UserProfileClientException(ClientErrorType.NOT_FOUND,
-                                                                  List.of(request.id())));
+        try {
+            List<BeneficiaryDTO> beneficiaries = asyncBeneficiaries.get();
 
-        List<BeneficiaryDTO> beneficiaries = asyncBeneficiaries.join();
+            return UserProfileMapper.map(asyncUserProfileEntity.get(), request.addressType(), beneficiaries);
+        } catch (InterruptedException | ExecutionException e) {
+            log.error("Interrupted", e);
+            throw new RuntimeException(e);
+        }
+    }
 
-        return UserProfileMapper.map(userProfileEntity, request.addressType(), beneficiaries);
+    @Async("asyncTaskExecutor")
+    private CompletableFuture<UserProfileEntity> getUserProfileEntity(long userProfileId) {
+        UserProfileEntity userProfileEntity = userProfileRepository.findById(userProfileId)
+                .orElseThrow(() -> new UserProfileClientException(ClientErrorType.NOT_FOUND, List.of(userProfileId)));
+
+        return CompletableFuture.completedFuture(userProfileEntity);
     }
 }
