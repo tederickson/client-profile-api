@@ -3,20 +3,17 @@ package com.erickson.client_profile_api.rest;
 import com.erickson.client_profile_api.ClientProfileApiApplication;
 import com.erickson.client_profile_api.domain.UserProfileResponse;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = ClientProfileApiApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/data/InitializeTests.sql")
 class UserProfileControllerIT {
