@@ -1,6 +1,7 @@
 package com.erickson.client_profile_api.rest;
 
 import com.erickson.client_profile_api.domain.AddressType;
+import com.erickson.client_profile_api.domain.CreateUserProfileRequest;
 import com.erickson.client_profile_api.domain.UserProfileRequest;
 import com.erickson.client_profile_api.domain.UserProfileResponse;
 import com.erickson.client_profile_api.exception.ClientErrorType;
@@ -9,6 +10,8 @@ import com.erickson.client_profile_api.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,5 +35,12 @@ public class UserProfileController {
         UserProfileRequest request = new UserProfileRequest(id, addressType1);
 
         return userProfileService.getUserProfile(request);
+    }
+
+    @PostMapping("/")
+    public UserProfileResponse createUserProfile(@RequestBody CreateUserProfileRequest createUserProfileRequest) {
+        createUserProfileRequest.validate();
+
+        return new UserProfileResponse();
     }
 }

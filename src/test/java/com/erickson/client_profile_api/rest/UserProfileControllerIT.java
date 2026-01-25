@@ -1,6 +1,7 @@
 package com.erickson.client_profile_api.rest;
 
 import com.erickson.client_profile_api.ClientProfileApiApplication;
+import com.erickson.client_profile_api.domain.CreateUserProfileRequest;
 import com.erickson.client_profile_api.domain.UserProfileResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,6 +68,21 @@ class UserProfileControllerIT {
         String message = response.getBody();
         assertNotNull(message);
         assertTrue(message.startsWith("No static resource v1/user_profile/id/4/addressType"));
+    }
+
+    @Test
+    void createUserProfile_MissingFields() {
+        String url = createURLWithPort("/v1/user_profile/");
+        CreateUserProfileRequest request = new CreateUserProfileRequest("  ", "", null, null);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(response.hasBody());
+
+        String message = response.getBody();
+        assertNotNull(message);
+        assertTrue(message.startsWith("Missing parameters "));
     }
 
     private String createURLWithPort(String uri) {
