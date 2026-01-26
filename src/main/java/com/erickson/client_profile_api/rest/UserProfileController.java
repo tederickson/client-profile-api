@@ -39,8 +39,6 @@ public class UserProfileController {
 
     @PostMapping("/")
     public UserProfileResponse createUserProfile(@RequestBody CreateUserProfileRequest createUserProfileRequest) {
-        createUserProfileRequest.validate();
-
-        return new UserProfileResponse();
+        return userProfileService.createUserProfile(createUserProfileRequest);
     }
 }

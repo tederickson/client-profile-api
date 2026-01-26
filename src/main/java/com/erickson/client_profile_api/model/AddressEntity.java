@@ -21,10 +21,10 @@ import lombok.ToString;
 public class AddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long addressId;
+    private Long addressId;
 
     @Version
-    private long version;
+    private Long version;
 
     private String line1;
     private String line2;

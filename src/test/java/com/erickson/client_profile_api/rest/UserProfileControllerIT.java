@@ -1,6 +1,8 @@
 package com.erickson.client_profile_api.rest;
 
 import com.erickson.client_profile_api.ClientProfileApiApplication;
+import com.erickson.client_profile_api.domain.Address;
+import com.erickson.client_profile_api.domain.AddressType;
 import com.erickson.client_profile_api.domain.CreateUserProfileRequest;
 import com.erickson.client_profile_api.domain.UserProfileResponse;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,9 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -81,8 +86,64 @@ class UserProfileControllerIT {
         assertTrue(response.hasBody());
 
         String message = response.getBody();
+
         assertNotNull(message);
         assertTrue(message.startsWith("Missing parameters "));
+    }
+
+    @Test
+    void createUserProfile_MissingAddressFields() {
+        String url = createURLWithPort("/v1/user_profile/");
+        CreateUserProfileRequest request = new CreateUserProfileRequest("George", "Orwell", LocalDate.now(),
+                                                                        List.of(new Address(null, " ", null, "", "", "",
+                                                                                            null)));
+
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(response.hasBody());
+
+        String message = response.getBody();
+        System.out.println("message = " + message);
+        assertNotNull(message);
+        assertTrue(message.startsWith("Missing parameters "));
+    }
+
+    @Test
+    void createUserProfile() {
+        String url = createURLWithPort("/v1/user_profile/");
+        LocalDate dateOfBirth = LocalDate.now();
+        CreateUserProfileRequest request = new CreateUserProfileRequest("George", "Orwell", dateOfBirth,
+                                                                        List.of(new Address(null,
+                                                                                            "123 Main St",
+                                                                                            "Apt 3A",
+                                                                                            "Somewhere",
+                                                                                            "CO",
+                                                                                            "80123",
+                                                                                            AddressType.WORK)));
+
+        ResponseEntity<UserProfileResponse> response = restTemplate.postForEntity(url, request,
+                                                                                  UserProfileResponse.class);
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.hasBody());
+
+        UserProfileResponse body = response.getBody();
+        assertNotNull(body);
+
+        assertEquals("George", body.getFirstName());
+        assertEquals("Orwell", body.getLastName());
+        assertEquals(dateOfBirth, body.getDateOfBirth());
+
+        assertEquals(1, body.getAddresses().size());
+        Address address = body.getAddresses().getFirst();
+
+        assertEquals("123 Main St", address.line1());
+        assertEquals("Apt 3A", address.line2());
+        assertEquals("Somewhere", address.city());
+        assertEquals("CO", address.state());
+        assertEquals("80123", address.zipCode());
+        assertEquals(AddressType.WORK, address.addressType());
     }
 
     private String createURLWithPort(String uri) {

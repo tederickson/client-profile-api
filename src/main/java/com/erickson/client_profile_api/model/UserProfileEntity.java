@@ -23,10 +23,10 @@ public class UserProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_profile_id")
-    private long userProfileId;
+    private Long userProfileId;
 
     @Version
-    private long version;
+    private Long version;
 
     private String firstName;
     private String lastName;

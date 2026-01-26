@@ -1,5 +1,7 @@
 package com.erickson.client_profile_api.service;
 
+import com.erickson.client_profile_api.domain.Address;
+import com.erickson.client_profile_api.domain.CreateUserProfileRequest;
 import com.erickson.client_profile_api.domain.UserProfileRequest;
 import com.erickson.client_profile_api.domain.UserProfileResponse;
 import com.erickson.client_profile_api.exception.ClientErrorType;
@@ -48,5 +50,16 @@ public class UserProfileService {
                 .orElseThrow(() -> new UserProfileClientException(ClientErrorType.NOT_FOUND, List.of(userProfileId)));
 
         return CompletableFuture.completedFuture(userProfileEntity);
+    }
+
+    public UserProfileResponse createUserProfile(CreateUserProfileRequest createUserProfileRequest) {
+        createUserProfileRequest.validate();
+        createUserProfileRequest.addresses().forEach(Address::validate);
+
+        UserProfileEntity userProfileEntity = UserProfileMapper.map(createUserProfileRequest);
+
+        UserProfileEntity dbUserProfileEntity = userProfileRepository.save(userProfileEntity);
+
+        return UserProfileMapper.map(dbUserProfileEntity);
     }
 }
