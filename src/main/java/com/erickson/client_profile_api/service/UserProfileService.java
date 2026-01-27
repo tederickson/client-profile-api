@@ -65,13 +65,13 @@ public class UserProfileService {
         UserProfileEntity userProfileEntity = UserProfileMapper.map(createUserProfileRequest);
 
         // Replace the save with this line to verify the method is retried
-        // throw new OptimisticLockException("wahoo!");
+        //  throw new OptimisticLockException("wahoo!");
         UserProfileEntity dbUserProfileEntity = userProfileRepository.save(userProfileEntity);
 
         return UserProfileMapper.map(dbUserProfileEntity);
     }
 
-    // This method is called if createUserProfile() fails after 3 attempts
+    // This method is called if createUserProfile() fails after multiple attempts
     @Recover
     public UserProfileResponse recover(OptimisticLockException e) {
         log.error("Recovery logic executed.", e);
