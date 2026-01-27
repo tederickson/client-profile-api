@@ -36,4 +36,4 @@
 ## How to Run
 
 * `mvn clean install ` runs all tests and adds two rows to the `user_profile` table
-* `mvn clean spring-boot:run` starts the application and allow curl or Postman queries to retrieve test data.
+* `mvn clean spring-boot:run` starts the application and allows curl or Postman queries to retrieve/create test data.
